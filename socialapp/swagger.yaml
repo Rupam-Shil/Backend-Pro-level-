@@ -1,0 +1,74 @@
+openapi: 3.0.0
+info:
+  title: Social App
+  description: Our first Social app - Rupam Shil
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api/v1/
+    description: localhost version of our app
+  - url: http://localhost:3000/api/v1/
+    description: this is just a dummy api url which doesn't work
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+security:
+  - BasicAuth: []
+
+paths:
+  /instagram:
+    get:
+      summary: It returns username , followers and follows
+      responses:
+        '200':
+          description: return an object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+
+                  followers:
+                    type: string
+                  follows:
+                    type: string
+    post:
+      summary: It returns username , followers and follows
+      responses:
+        '200':
+          description: return an object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+
+                  followers:
+                    type: string
+                  follows:
+                    type: string
+  /user/{id}:
+    get:
+      summary: return whatever is there in parameter
+      parameters:
+        - name: token
+          default: 5
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: return an object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string

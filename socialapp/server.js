@@ -2,8 +2,13 @@ import express from 'express';
 import axios from 'axios';
 import cheerio from 'cheerio';
 import format from 'date-format';
-
 const app = express();
+//swagger doc related
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+const swaggerDocument = YAML.load('./swagger.yaml');
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
