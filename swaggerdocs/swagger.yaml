@@ -21,10 +21,12 @@ servers:
         enum:
           - v1
           - v2
+        default: v1
       protocol:
         enum:
           - http
           - https
+        default: http
 
 components:
   securitySchemes:
@@ -52,3 +54,102 @@ paths:
                 example: 'mystring'
         400:
           description: Bad request
+
+  /rupamobject:
+    get:
+      tags:
+        - Object
+      summary: returns a unique course
+      responses:
+        200:
+          description: All good success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  price:
+                    type: number
+
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /courses:
+    get:
+      tags:
+        - Array
+      summary: returns all the courses
+      responses:
+        200:
+          description: All good success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    price:
+                      type: number
+
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /mycourse/{courseId}:
+    get:
+      tags:
+        - Object
+      summary: returns course based on return id
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          default: 11
+          schema:
+            type: string
+      responses:
+        200:
+          description: All good success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  price:
+                    type: number
+
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
