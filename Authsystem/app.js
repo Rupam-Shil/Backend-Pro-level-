@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 require('./config/database').connect();
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const User = require('./models/user');
 
 const app = express();
@@ -24,6 +25,22 @@ app.post('/register', async (req, res) => {
 	if (existingUser) {
 		res.status(401).send('User already exists');
 	}
+
+	const myEncryptPassword = await bcrypt.hash(password, 10);
+
+	// let user = new User({
+	// 		firstName,
+	// 		lastName,
+	// 		email: email.toLowerCase(),
+	// 		password:myEncryptPassword,
+	// });
+	// user = user.save();
+	const user = await User.create({
+		firstName,
+		lastName,
+		email: email.toLowerCase(),
+		password: myEncryptPassword,
+	});
 });
 
 module.exports = app;
