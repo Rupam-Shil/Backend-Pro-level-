@@ -90,6 +90,11 @@ app.post('/login', async (req, res) => {
 	}
 });
 
+app.get('/logout', auth, (req, res) => {
+	res.clearCookie('token');
+	res.send('Logged out');
+});
+
 app.get('/dashboard', auth, (req, res) => {
 	res.status(200).send('Welcome to secret information');
 });
