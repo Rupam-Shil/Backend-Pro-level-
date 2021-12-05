@@ -1,6 +1,7 @@
 const express = require('express');
 
 const app = express();
+const Razorpay = require('razorpay');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -11,11 +12,11 @@ app.get('/', (req, res) => {
 });
 
 app.post('/order', async (req, res) => {
-	const { ammount } = req.body;
+	const { amount } = req.body;
 
 	var instance = new Razorpay({
-		key_id: 'YOUR_KEY_ID',
-		key_secret: 'YOUR_SECRET',
+		key_id: 'id',
+		key_secret: 'key',
 	});
 
 	var options = {
@@ -32,7 +33,7 @@ app.post('/order', async (req, res) => {
 
 	res.status(201).json({
 		success: true,
-		ammount: ammount * 100,
+		amount: amount * 100,
 		order: myOrder,
 	});
 });
