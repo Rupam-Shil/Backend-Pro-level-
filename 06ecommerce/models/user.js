@@ -51,8 +51,6 @@ userSchema.pre('save', async function (next) {
 	this.password = await bcrypt.hash(this.password, 10);
 });
 
-const User = mongoose.model('users', userSchema);
-
 //validate the password with passed on user password
 userSchema.methods.isValidatedPassword = async function (password) {
 	return await bcrypt.compare(password, this.password);
@@ -79,5 +77,6 @@ userSchema.methods.getForgotPasswordToken = function () {
 	this.forgotPasswordExpiry = Date.now() + 20 * 60 * 1000;
 	return forgotToken;
 };
+const User = mongoose.model('users', userSchema);
 
 module.exports = User;

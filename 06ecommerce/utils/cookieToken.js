@@ -7,6 +7,7 @@ const cookieToken = (res, user) => {
 		),
 		httpOnly: true,
 	};
+	user.password = undefined;
 	res.status(200).cookie('token', token, options).json({
 		success: true,
 		token,

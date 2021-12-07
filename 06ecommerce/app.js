@@ -16,8 +16,15 @@ app.use(express.urlencoded({ extended: true }));
 
 //cookie and file middleware
 app.use(cookieParser());
-app.use(fileUpload());
-
+app.use(
+	fileUpload({
+		useTempFiles: true,
+		tempFileDir: '/tmp/',
+	})
+);
+//temp check
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 //morgan middleware
 app.use(morgan('tiny'));
 //import all routes here
@@ -26,6 +33,9 @@ const user = require('./routes/user');
 
 app.use('/api/v1', home);
 app.use('/api/v1', user);
+app.get('/signuptest', (req, res) => {
+	res.render('signuptest');
+});
 
 //export
 module.exports = app;
