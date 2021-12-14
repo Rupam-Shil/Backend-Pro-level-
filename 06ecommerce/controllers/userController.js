@@ -10,7 +10,6 @@ const crypto = require('crypto');
 exports.signup = BigPromise(async (req, res, next) => {
 	let result;
 	if (req.files) {
-		console.log('here');
 		let file = req.files.photo;
 		result = await cloudinary.uploader.upload(file.tempFilePath, {
 			folder: 'ecom',
@@ -128,6 +127,7 @@ exports.passwordReset = BigPromise(async (req, res, next) => {
 	//send a json response
 	cookieToken(res, user);
 });
+
 exports.getLoggedInUserDetails = BigPromise(async (req, res, next) => {
 	const user = await User.findById(req.user.id);
 
@@ -136,6 +136,7 @@ exports.getLoggedInUserDetails = BigPromise(async (req, res, next) => {
 		user,
 	});
 });
+
 exports.changePassword = BigPromise(async (req, res, next) => {
 	const userId = req.user.id;
 	const user = await User.findById(userId).select('+password');
@@ -150,4 +151,50 @@ exports.changePassword = BigPromise(async (req, res, next) => {
 	await user.save();
 
 	cookieToken(res, user);
+});
+
+exports.updateUserDetails = BigPromise(async (req, res, next) => {
+	const { name, email } = req.body;
+	if (!name && !email) {
+		return next(new CustomError('all fields required', 400));
+	}
+	const newData = {
+		name,
+		email,
+	};
+	if (req.files) {
+		const user = await User.findById(req.user.id);
+		const imageId = user.photo.id;
+		const resp = await cloudinary.uploader.destroy(imageId);
+		const result = await cloudinary.uploader.upload(
+			req.files.photo.tempFilePath,
+			{
+				folder: 'ecom',
+				width: 150,
+				crop: 'scale',
+			}
+		);
+		newData.photo = {
+			id: result.public_id,
+			secure_url: result.secure_url,
+		};
+	}
+	const user = await User.findByIdAndUpdate(req.user.id, newData, {
+		new: true,
+		runValidators: true,
+		useFindAndModify: false,
+	});
+
+	res.status(200).json({
+		success: true,
+	});
+});
+
+exports.allAdminUsers = BigPromise(async (req, res, next) => {
+	const users = await User.find();
+
+	res.status(200).json({
+		success: true,
+		users,
+	});
 });
