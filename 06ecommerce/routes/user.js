@@ -11,6 +11,10 @@ const {
 	changePassword,
 	allAdminUsers,
 	updateUserDetails,
+	allManagerUsers,
+	admingetOneUser,
+	adminUpdateUserDetails,
+	adminDeleteUsers,
 } = require('../controllers/userController');
 
 router.post('/signup', signup);
@@ -22,6 +26,28 @@ router.get('/userdashboard', isLoggedIn, getLoggedInUserDetails);
 router.post('/password/update', isLoggedIn, changePassword);
 router.put('/userdashboard/update', isLoggedIn, updateUserDetails);
 
+//admin only routes
 router.get('/admin/users', isLoggedIn, customRole('admin'), allAdminUsers);
+router.get('/admin/user/:id', isLoggedIn, customRole('admin'), admingetOneUser);
+router.put(
+	'/admin/user/:id',
+	isLoggedIn,
+	customRole('admin'),
+	adminUpdateUserDetails
+);
+router.delete(
+	'/admin/user/:id',
+	isLoggedIn,
+	customRole('admin'),
+	adminDeleteUsers
+);
+
+//manager only routes
+router.get(
+	'/manager/users',
+	isLoggedIn,
+	customRole('manager'),
+	allManagerUsers
+);
 
 module.exports = router;
